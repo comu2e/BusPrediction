@@ -11,17 +11,27 @@ import RealmSwift
 import Unbox
 
 class ViewController: UIViewController {
+    let BusStopURL = NSBundle.mainBundle().URLForResource("MapDataMaster", withExtension: "json")!
+//    let BusStopURLFixed = NSBundle.mainBundle().URLForResource("BusStopDataFixed", withExtension: "json")!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        let start = NSDate()
+        let BusData = NSData(contentsOfURL:self.BusStopURL)!
+        print(BusData)
+        let elapsed = NSDate().timeIntervalSinceDate(start)
+        print(elapsed)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
+    func parseJsonData() {
+        
+    }
+    
 
 }
 
