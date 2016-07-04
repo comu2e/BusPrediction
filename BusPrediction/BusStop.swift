@@ -82,7 +82,7 @@ import Unbox
 
 //データ構造をこのようにかいてみました
 struct Station {
-    let station: StationName
+    let station: String
     
     init(unboxer: Unboxer) {
         self.station = unboxer.unbox("station")
@@ -129,7 +129,7 @@ struct rosen_by_order{
 
 
 struct rosen {
-    let rosen_by_order_element_string : rosen_info
+    let rosen_by_order_element_string : String
     init(unboxer: Unboxer) {
         self.rosen_by_order_element_string = unboxer.unbox("rosen_byorder")
     }
