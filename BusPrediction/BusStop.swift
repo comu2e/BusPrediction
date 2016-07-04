@@ -9,6 +9,7 @@
 
 /*
 JSONファイルの構造
+ BusStopDataFixed.json
     {
         ①station:
         {
@@ -76,12 +77,28 @@ rosen構造体内でそれぞれの値(20001)の要素,dest,companyidなどを�
  }
  
 */
-struct station {
+import Unbox
+
+
+//データ構造をこのようにかいてみました
+struct Station {
     let station: StationName
     
+    init(unboxer: Unboxer) {
+        self.station = unboxer.unbox("station")
+    }
 }
 
 struct StationName {
+    let station_Name:StationNameInfo
+    init(unboxer: Unboxer){
+        self.station_Name = unboxer.unbox("立命館大学前(京都市バス)")
+    }
+}
+
+
+
+struct StationNameInfo {
     let  exflag : Int
     let  ekidiv : String
     let  selectname : String
@@ -89,15 +106,33 @@ struct StationName {
     let  kyotoflag : Int
     let  lat : Float
     let  lng : Float
+    init(unboxer: Unboxer) {
+        self.exflag = unboxer.unbox("exfalg")
+        self.ekidiv = unboxer.unbox("ekidiv")
+        self.selectname = unboxer.unbox("selectname")
+        self.stationtype = unboxer.unbox("stationtype")
+        self.kyotoflag = unboxer.unbox("kyotoflag")
+        self.lat = unboxer.unbox("lat")
+        self.lng = unboxer.unbox("lng")
+    }
 }
+
 
 
 struct rosen_by_order{
     let rosen_by_order_Array:[Int]
+    
+    init(unboxer: Unboxer) {
+        self.rosen_by_order_Array = unboxer.unbox("rosen_byorder")
+    }
 }
+
 
 struct rosen {
     let rosen_by_order_element_string : rosen_info
+    init(unboxer: Unboxer) {
+        self.rosen_by_order_element_string = unboxer.unbox("rosen_byorder")
+    }
 }
 
 struct rosen_info{
@@ -106,6 +141,14 @@ struct rosen_info{
     let expl:String
     let statinos:[String]
     let name:String
+    init(unboxer: Unboxer) {
+                 self.dest = unboxer.unbox("dest")
+                 self.companyid = unboxer.unbox("companyid")
+                 self.expl = unboxer.unbox("expl")
+                 self.statinos = unboxer.unbox("stations")
+                 self.name = unboxer.unbox("name")
+        
+            }
 }
 
 struct company {
@@ -115,7 +158,9 @@ struct company {
 struct company_byorder_element {
     let name:String
     let ekidiv:String
+        init(unboxer: Unboxer) {
+                self.name = unboxer.unbox("name")
+                self.ekidiv = unboxer.unbox("ekidiv")
+    }
 }
-
-
 
