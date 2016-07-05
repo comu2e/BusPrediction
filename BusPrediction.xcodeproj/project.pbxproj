@@ -14,8 +14,7 @@
 		250EC0A81D2AAE19005FF5CB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 250EC0A61D2AAE19005FF5CB /* LaunchScreen.storyboard */; };
 		250EC0B21D2AB48C005FF5CB /* BusStop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 250EC0B11D2AB48C005FF5CB /* BusStop.swift */; };
 		254BC5021D2BC81000DC0728 /* BusStopDataFixed.json in Resources */ = {isa = PBXBuildFile; fileRef = 254BC5011D2BC81000DC0728 /* BusStopDataFixed.json */; };
-		254BC5041D2BD1ED00DC0728 /* dictionary.json in Resources */ = {isa = PBXBuildFile; fileRef = 254BC5031D2BD1ED00DC0728 /* dictionary.json */; };
-		254BC5061D2BD1FF00DC0728 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254BC5051D2BD1FF00DC0728 /* Model.swift */; };
+		254BC5061D2BD1FF00DC0728 /* Rosen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254BC5051D2BD1FF00DC0728 /* Rosen.swift */; };
 		4474BD5C4BFE6350D5152989 /* Pods_BusPrediction.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E82970D9D4A4A4A5936A66BB /* Pods_BusPrediction.framework */; };
 /* End PBXBuildFile section */
 
@@ -30,8 +29,7 @@
 		250EC0A91D2AAE19005FF5CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		250EC0B11D2AB48C005FF5CB /* BusStop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusStop.swift; sourceTree = "<group>"; };
 		254BC5011D2BC81000DC0728 /* BusStopDataFixed.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = BusStopDataFixed.json; sourceTree = "<group>"; };
-		254BC5031D2BD1ED00DC0728 /* dictionary.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dictionary.json; sourceTree = "<group>"; };
-		254BC5051D2BD1FF00DC0728 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		254BC5051D2BD1FF00DC0728 /* Rosen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rosen.swift; sourceTree = "<group>"; };
 		8D20081EFA7E90AB3D3B7501 /* Pods-BusPrediction.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BusPrediction.release.xcconfig"; path = "Pods/Target Support Files/Pods-BusPrediction/Pods-BusPrediction.release.xcconfig"; sourceTree = "<group>"; };
 		E82970D9D4A4A4A5936A66BB /* Pods_BusPrediction.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BusPrediction.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -73,8 +71,7 @@
 				250EC09F1D2AAE19005FF5CB /* ViewController.swift */,
 				250EC0B11D2AB48C005FF5CB /* BusStop.swift */,
 				254BC5011D2BC81000DC0728 /* BusStopDataFixed.json */,
-				254BC5031D2BD1ED00DC0728 /* dictionary.json */,
-				254BC5051D2BD1FF00DC0728 /* Model.swift */,
+				254BC5051D2BD1FF00DC0728 /* Rosen.swift */,
 				250EC0A11D2AAE19005FF5CB /* Main.storyboard */,
 				250EC0A41D2AAE19005FF5CB /* Assets.xcassets */,
 				250EC0A61D2AAE19005FF5CB /* LaunchScreen.storyboard */,
@@ -164,7 +161,6 @@
 			files = (
 				250EC0A81D2AAE19005FF5CB /* LaunchScreen.storyboard in Resources */,
 				250EC0A51D2AAE19005FF5CB /* Assets.xcassets in Resources */,
-				254BC5041D2BD1ED00DC0728 /* dictionary.json in Resources */,
 				250EC0A31D2AAE19005FF5CB /* Main.storyboard in Resources */,
 				254BC5021D2BC81000DC0728 /* BusStopDataFixed.json in Resources */,
 			);
@@ -228,7 +224,7 @@
 				250EC0B21D2AB48C005FF5CB /* BusStop.swift in Sources */,
 				250EC0A01D2AAE19005FF5CB /* ViewController.swift in Sources */,
 				250EC09E1D2AAE19005FF5CB /* AppDelegate.swift in Sources */,
-				254BC5061D2BD1FF00DC0728 /* Model.swift in Sources */,
+				254BC5061D2BD1FF00DC0728 /* Rosen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

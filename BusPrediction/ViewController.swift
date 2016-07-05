@@ -11,58 +11,95 @@ import RealmSwift
 import Unbox
 
 class ViewController: UIViewController {
-   
+    
     let BusStopURLFixed = NSBundle.mainBundle().URLForResource("BusStopDataFixed", withExtension: "json")!
-    
-    
     let realm = try! Realm()
 //    各路線rosen_byorder要素ごとにおける駅名配列辞書
-    let dictionary_rosen:[Int:[String]]! = nil
+    var dictionary_rosen:NSDictionary!
+    
+    var rosen:Rosen!
+    var stationlist:StationsList!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
 //        Jsonファイルの読み込み
-        let BusData = NSData(contentsOfURL:self.BusStopURLFixed)!
-//        Unboxインスタンス
-        let rbo:rosen_by_order = try! Unbox(BusData)
-//        let rosen:Rosen = try! Unbox(BusData)
-        
-        let rbo_int = rbo.rosen_by_order_Array
-//        rboの要素をクロージャーを使って文字列化
-        let rbo_string = rbo_int.map{($0).description}
-//        Rosenから各stations[String]を取り出す
-//        そしてそれらをdictionary[rbo] = [String]としてDB化
-//        rbo_stringそれぞれの要素iについてそれをkeyとしてdest,[stations]を取り出していきたい
-        for i in rbo_string
-            {
-            
-                struct Rosen:Unboxable
-                {
-                    let dest:String
-                    let companyid:Int
-                    let expl:String
-                    let statinos:[String]
-                    let name:String
-                        init(unboxer: Unboxer)
-                        {
-                            self.dest = unboxer.unbox("rosen.(\(i).dest",isKeyPath: true)
-                            self.companyid = unboxer.unbox("rosen.\(i).companyid",isKeyPath: true)
-                            self.expl = unboxer.unbox("rosen.\(i).expl",isKeyPath: true)
-                            self.statinos = unboxer.unbox("rosen.\(i).stations",isKeyPath: true)
-                            self.name = unboxer.unbox("rosen.\(i).name",isKeyPath: true)
-                        }
-                }
-            let rosen:Rosen = try! Unbox(BusData)
-            dictionary_rosen[i] = [rosen.dest,rosen.companyid...]
-            }
+        parseRosenStationFromJson()
+//        realmに書き込み次回起動時はこのDBから読み出す
+//        realmがあるときは現在地を取得
+//        現在地を取得して近くのバス停をピン付する
     }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
  
     
-   
+    func parseRosenStationFromJson(){
+        let BusData = NSData(contentsOfURL:self.BusStopURLFixed)!
+        let rbo:rosen_by_order = try! Unbox(BusData)
+        let rbo_int = rbo.rosen_by_order_Array
+        //        rboの要素をクロージャーを使って文字列化
+        let rbo_string = rbo_int.map{($0).description} as [String]!
+        let bundle = NSBundle.mainBundle()
+       
+        if let path = bundle.pathForResource("BusStopDataFixed", ofType: "json")
+        {
+            do
+            {
+                let str = try String(contentsOfFile: path, encoding: NSUTF8StringEncoding)
+                let data = str.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!
+                let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+//                元データ化からrosen配列をとりだす
+                if (json["rosen"]  as? NSDictionary!) != nil
+                {
+                    do
+                    {
+                        for i in rbo_string
+                        {
+                            // rosenのデータをi(200001などで)取り出してdictionary_rosenにいれる
+                            try realm.write
+                                {let json_rosen = json["rosen"]
+                               if (json_rosen!["\(i)"] as? NSDictionary!) != nil
+                               {
+                                  do{
+                                        let data = try json_rosen!["\(i)"]
+                                        print(data)
+//                                      self.rosen.stations = data["stations"]
+//                                      self.rosen.expl = data["expl"]
+//                                      self.rosen.dest = data["dest"]
+//                                      self.rosen.companyid = data["companyid"]
+//                                      self.realm.add(self.rosen, update: true)
+                                    }catch
+                                    
+                                    {
+                                    print("realm")
+                                    }
+                                }
+                                }
+                        }
+//                     forループ
+                        
+                    }
+                    catch
+                    {
+                        print("json_rosen_error")
+                    }
+                }
+            }
+            catch
+            {
+                print("error")
+            }
+            
+        }
+        print(dictionary_rosen)
+        print("success!")
+    }
+    
+    
 }
+
+
 
