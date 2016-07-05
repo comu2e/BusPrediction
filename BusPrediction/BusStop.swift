@@ -10,7 +10,7 @@
 /*
 JSONファイルの構造
  BusStopDataFixed.json
-    {
+   BusStopクラス {
         ①station:
         {
            ② StationName構造体:
@@ -26,13 +26,13 @@ JSONファイルの構造
             
         },
  ,
- ③rosen_byorder:[Int]　//この配列を最初に読み込まなければならない？
+ ③rosen_byorder:[Int]　//この配列を最初に読み込まなければならない
                         読み込みそれぞれの値(ex:20001)
 rosen構造体内でそれぞれの値(20001)の要素,dest,companyidなどを読み込む
  ,
-        ④rosen:
+        ④Rosen:
         {
-            ④`rosen_byorder_string構造体[comment:rosen_byorderをString化これをrosen_by_order_element_stringとする]:
+            ④`rosen_byorder_string構造体[comment:rosen_byorder③をString化これをrosen_by_order_element_stringとする]:
             { ④``下の情報をrosen_info構造体とする
                 dest:String,
                 companyid:Int,
@@ -79,9 +79,8 @@ rosen構造体内でそれぞれの値(20001)の要素,dest,companyidなどを�
 */
 import Unbox
 
-
 //データ構造をこのようにかいてみました
-struct Station {
+struct Station :Unboxable{
     let station: String
     
     init(unboxer: Unboxer) {
@@ -89,16 +88,15 @@ struct Station {
     }
 }
 
-struct StationName {
-    let station_Name:StationNameInfo
+struct StationName :Unboxable{
+    let station_Name:String
     init(unboxer: Unboxer){
         self.station_Name = unboxer.unbox("立命館大学前(京都市バス)")
     }
 }
 
 
-
-struct StationNameInfo {
+struct StationNameInfo :Unboxable{
     let  exflag : Int
     let  ekidiv : String
     let  selectname : String
@@ -119,7 +117,7 @@ struct StationNameInfo {
 
 
 
-struct rosen_by_order{
+struct rosen_by_order:Unboxable{
     let rosen_by_order_Array:[Int]
     
     init(unboxer: Unboxer) {
@@ -127,35 +125,37 @@ struct rosen_by_order{
     }
 }
 
+//JSONファイルにおいて17400行目
+//struct Rosen :Unboxable{
+//    let rosen_by_order_element_string : String
+//    init(unboxer: Unboxer) {
+//        self.rosen_by_order_element_string = unboxer.unbox("String(rosen_byorder)")
+//    }
+//}
+//
+//struct rosen_info:Unboxable{
+//    let dest:String
+//    let companyid:Int
+//    let expl:String
+//    let statinos:[String]
+//    let name:String
+//    init(unboxer: Unboxer) {
+//                 self.dest = unboxer.unbox("dest")
+//                 self.companyid = unboxer.unbox("companyid")
+//                 self.expl = unboxer.unbox("expl")
+//                 self.statinos = unboxer.unbox("stations")
+//                 self.name = unboxer.unbox("name")
+//        
+//            }
+//}
 
-struct rosen {
-    let rosen_by_order_element_string : String
-    init(unboxer: Unboxer) {
-        self.rosen_by_order_element_string = unboxer.unbox("rosen_byorder")
-    }
-}
 
-struct rosen_info{
-    let dest:String
-    let companyid:Int
-    let expl:String
-    let statinos:[String]
-    let name:String
-    init(unboxer: Unboxer) {
-                 self.dest = unboxer.unbox("dest")
-                 self.companyid = unboxer.unbox("companyid")
-                 self.expl = unboxer.unbox("expl")
-                 self.statinos = unboxer.unbox("stations")
-                 self.name = unboxer.unbox("name")
-        
-            }
-}
+//
+//struct company :Unboxable{
+//    let company_byorder_element_info:company_byorder_element
+//}
 
-struct company {
-    let company_byorder_element_info:company_byorder_element
-}
-
-struct company_byorder_element {
+struct company_byorder_element :Unboxable{
     let name:String
     let ekidiv:String
         init(unboxer: Unboxer) {
@@ -163,4 +163,3 @@ struct company_byorder_element {
                 self.ekidiv = unboxer.unbox("ekidiv")
     }
 }
-
