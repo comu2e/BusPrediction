@@ -9,23 +9,24 @@
 import UIKit
 import RealmSwift
 import Unbox
-
+import SwiftyJSON
+import ObjectMapper
 class ViewController: UIViewController {
     
     let BusStopURLFixed = NSBundle.mainBundle().URLForResource("BusStopDataFixed", withExtension: "json")!
-    let realm = try! Realm()
     //    各路線rosen_byorder要素ごとにおける駅名配列辞書
     var dictionary_rosen:NSDictionary!
     
-    var rosen = try! Realm().objects(Rosen)
+    //    var rosen = try! Realm().objects(Rosen)
     
-    var stationlist:StationsList!
+    //    var stationlist:StationsList!
     
-    var cnt:Int! = 0
+    let realm = try! Realm()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //        Jsonファイルの読み込み
-        parseRosenStationFromJson()
+        jsonParseWithSwiftyJson()
         //        realmに書き込み次回起動時はこのDBから読み出す
         //        realmがあるときは現在地を取得
         //        現在地を取得して近くのバス停をピン付する
@@ -35,68 +36,54 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    
-    func parseRosenStationFromJson(){
+    func jsonParseWithSwiftyJson()  {
         let BusData = NSData(contentsOfURL:self.BusStopURLFixed)!
+        //      UNbox使ってるけどつかわなくてもよい
         let rbo:rosen_by_order = try! Unbox(BusData)
         let rbo_int = rbo.rosen_by_order_Array
-        //        rboの要素をクロージャーを使って文字列化
-        let rbo_string = rbo_int.map{($0).description} as [String]!
-        let bundle = NSBundle.mainBundle()
+        //      rboの要素をクロージャーを使って文字列化
+        //       事前に必要なかたちに直しておく
+        //        JSON自体が辞書型
+        //        最初から加工しておく
+        //        加工する部分をアプリでつくっておく
+        //        バスとバス停をわけてそれをつなげる．
+        //        
+        //        バスのモデル
+        //        時刻のモデル（どのバスが）
+        //        バス停のモデル
+        //        路線のモデル
+        //        複数のDBを結合
+        //        
         
-        if let path = bundle.pathForResource("BusStopDataFixed", ofType: "json")
-        {
-            do
-            {
-                let str = try String(contentsOfFile: path, encoding: NSUTF8StringEncoding)
-                let data = str.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!
-                let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
-                //                元データ化からrosen配列をとりだす
-                if (json["rosen"]  as? NSDictionary!) != nil
-                {
-                    do
-                    {
-                        for i in rbo_string
-                        {
-                            // rosenのデータをi(200001などで)取り出してdictionary_rosenにいれる
-                            try realm.write
-                                {let json_rosen = json["rosen"]
-                                    if (json_rosen!["\(i)"] as? NSDictionary!) != nil
-                                    {
-                                        do
-                                        {
-                                            let data = json_rosen!["\(i)"]
-//                                            print(String(data).utf8)
-//                                            self.realm.add(self.rosen, update: true)
-//                                            print(rosen.count)
-                                        }
-                                    }
-                            }
-                        }
-                        //                     forループ
+        let rbo_string = rbo_int.map{($0).description} as [String]!
+        let json = JSON(data:BusData)
+        //        
+        for i in rbo_string{
+            if  json != nil{
+                let stations = json["rosen"]["\(i)"]["stations"].arrayObject
+                let companyid = json["rosen"]["\(i)"]["companyid"].int
+                let dest = json["rosen"]["\(i)"]["dest"].string
+                let expl = json["rosen"]["\(i)"]["expl"].string
+                let name = json["rosen"]["\(i)"]["name"].string
+                
+                for station in stations!{
+                    let lat = json["station"]["\(station)"]["lat"].float
+                    let lng = json["station"]["\(station)"]["lng"].float
+                    //                   この処理に4minかかるのでこの方法は効率的でない
+                    //                    まずlat,lng情報を元にピン付する
+                    //                    方針  現在地を取得してその周囲(例えば5km以内)のピンだけを地図上に表示
+                    //                          ピンをタップするとlat,lng情報に当てはまるデータだけをピンのセルに表示
+                    
+                    if lat != nil{
                         
                     }
-                        
-                    catch
-                    {
-                        print("json_rosen_error")
-                    }
+                    
                 }
             }
-            catch
-            {
-                print("error")
-            }
-            
         }
-            
-        else{
-            return
-        }
+        //                realmに入れれば使いやすくなってよい？
+        //                プライマリーキーをなににする？
     }
-    
-    
 }
 
 
