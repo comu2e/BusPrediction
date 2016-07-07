@@ -7,7 +7,7 @@
 //
 //        ここにすべてのバス停情報をいれていく
 //        後にここから重複すvar要素をはぶき，unique_arrayとしてかえす
-//      rboの要素をクロージャーを使って文字列化
+//      rboの要素をクロージャーを使って文字列var
 //       事前に必要なかたちに直しておく
 //        JSON自体が辞書型
 //        最初から加工しておく
@@ -27,27 +27,27 @@ import Unbox
 import SwiftyJSON
 import ObjectMapper
 class ViewController: UIViewController {
-    
+//    JSONデータ
     let BusData = NSData(contentsOfURL:NSBundle.mainBundle().URLForResource("BusStopDataFixed", withExtension: "json")!)
     let json = JSON(data:NSData(contentsOfURL:NSBundle.mainBundle().URLForResource("BusStopDataFixed", withExtension: "json")!)!)
 
     //    各路線rosen_byorder要素ごとにおける駅名配列辞書
     var dictionary_rosen:NSDictionary!
-    
-    //    var rosen = try! Realm().objects(Rosen)
-    
-    //    var stationlist:StationsList!
-    
+//  realmインスタンス
+  
     let realm_position = try! Realm()
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         //        Jsonファイルの読み込み
         let unique_array = makeUniqueStationArray()
         takePositionInfoFromStationName(unique_array)
+        
         //        realmに書き込み次回起動時はこのDBから読み出す
         //        realmがあるときは現在地を取得
         //        現在地を取得して近くのバス停をピン付する
+   
         
     }
     
@@ -56,7 +56,7 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     func makeUniqueStationArray() -> [String] {
-//        重複する要素を配列から取り除く関数を定義
+        //        重複する要素を配列から取り除く関数を定義
         func returnUniqueArray(source:[AnyObject]) -> [AnyObject] {
             let set = NSOrderedSet(array: source)
             let result = set.array as! [String]
@@ -69,8 +69,9 @@ class ViewController: UIViewController {
         var master_station_array:[String] = []
         
         let rbo_string = rbo_int.map{($0).description} as [String]!
-//        let json = JSON(data:self.BusData!)
-//ここでunique_arrayを作る
+        //        let json = JSON(data:self.BusData!)
+        
+        //ここでunique_arrayを作る
         for i in rbo_string{
             if  self.json != nil{
                 let stations = self.json["rosen"]["\(i)"]["stations"].arrayObject as! [String]
@@ -85,27 +86,29 @@ class ViewController: UIViewController {
         let  unique_array = returnUniqueArray(master_station_array) as! [String]
         return unique_array
     }
+//    Realmファイル作製
     func takePositionInfoFromStationName(unique_array:[String]){
-        var position_with_stationname:[String:[Float?]] = [:]
         for station in unique_array{
             if self.json != nil {
-                var lat = self.json["station"]["\(station)"]["lat"].float
-                var lng = self.json["station"]["\(station)"]["lng"].float
-                var position = [lat,lng]
-//                position_with_stationname.updateValue(position, forKey: station)
-//                
+                //                lat = 32.000,lng = 34.000など
+                let lat = self.json["station"]["\(station)"]["lat"].float
+                let lng = self.json["station"]["\(station)"]["lng"].float
+                
                 try! self.realm_position.write(){
-                    let station_position = StationPositoinRealm()
+                    let station_position = StationPositionRealm()
                     let gps = GPS()
-                    let position_realm = [gps.lat,gps.lng]
-                    station_position.StationName = station
-                    station_position.Position.append(position)
                     
-                    realm_position.add(station_position)
+                    station_position.StationName = station
+                    gps.lat = lat!
+                    gps.lng = lng!
+                    
+                    self.realm_position.add(station_position)
+                    self.realm_position.add(gps)
                 }
+
             }
         }
-        print(position_with_stationname)
+        
     }
     
     

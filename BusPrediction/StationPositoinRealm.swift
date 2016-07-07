@@ -9,14 +9,16 @@
 import Foundation
 import RealmSwift
 
-class StationPositoinRealm: Object {
-    
-        dynamic var StationName:String = ""
-        var  Position = List<GPS>()
-  
-}
+
 
 class GPS:Object{
     dynamic var lat:Float = 0.0
     dynamic var lng:Float = 0.0
+}
+
+class StationPositionRealm: Object {
+    
+    dynamic var StationName:String = ""
+    let  positions = List<GPS>()
+    
 }
