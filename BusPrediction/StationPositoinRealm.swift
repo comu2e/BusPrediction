@@ -14,11 +14,12 @@ import RealmSwift
 class GPS:Object{
     dynamic var lat:Float = 0.0
     dynamic var lng:Float = 0.0
+    let gpses = LinkingObjects(fromType: StationPositionRealm.self, property: "positions")
 }
 
 class StationPositionRealm: Object {
-    
     dynamic var StationName:String = ""
-    let  positions = List<GPS>()
+    var positions:GPS?
     
 }
+
