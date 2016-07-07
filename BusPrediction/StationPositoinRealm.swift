@@ -19,7 +19,7 @@ class GPS:Object{
 
 class StationPositionRealm: Object {
     dynamic var StationName:String = ""
-    var positions:GPS?
+    dynamic var positions:GPS?
     
 }
 
