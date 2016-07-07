@@ -88,7 +88,9 @@ class ViewController: UIViewController {
     }
 //    Realmファイル作製
     func takePositionInfoFromStationName(unique_array:[String]){
+        print(unique_array.count)
         for station in unique_array{
+//            ここで重複が起きている？
             if self.json != nil {
                 //                lat = 32.000,lng = 34.000など
                 let lat = self.json["station"]["\(station)"]["lat"].float
