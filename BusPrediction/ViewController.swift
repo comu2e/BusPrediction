@@ -27,43 +27,53 @@ import Unbox
 import SwiftyJSON
 import ObjectMapper
 import Realm
-class ViewController: UIViewController {
-    //    JSONデータ
-    //    let BusData = NSData(contentsOfURL:NSBundle.mainBundle().URLForResource("BusStopDataFixed", withExtension: "json")!)
-    //    let json = JSON(data:NSData(contentsOfURL:NSBundle.mainBundle().URLForResource("BusStopDataFixed", withExtension: "json")!)!)
-    //    バンドルしておいたRealmファイルを読み込み
-    
-    //    各路線rosen_byorder要素ごとにおける駅名配列辞書
-    //    var dictionary_rosen:NSDictionary!
-    //  realmインスタンス
+import MapKit
+import CoreLocation
+
+class ViewController: UIViewController , CLLocationManagerDelegate{
+    /*
+     JSONデータ
+     let BusData = NSData(contentsOfURL:NSBundle.mainBundle().URLForResource("BusStopDataFixed", withExtension: "json")!)
+     let json = JSON(data:NSData(contentsOfURL:NSBundle.mainBundle().URLForResource("BusStopDataFixed", withExtension: "json")!)!)
+     バンドルしておいたRealmファイルを読み込み
+     
+     各路線rosen_byorder要素ごとにおける駅名配列辞書
+     var dictionary_rosen:NSDictionary!
+     realmインスタンス
+     */
+    @IBOutlet weak var MapView: MKMapView!
+    var lm: CLLocationManager! = nil
+    var myLocationManager:CLLocationManager!
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        //        JSONからRealmファイル作るときにコメントアウトすればいい
+        //        json_to_realm()
+        
         
         let config = Realm.Configuration(
-            // アプリケーションバンドルのパスを設定します
             fileURL: NSBundle.mainBundle().URLForResource("Position", withExtension: "realm"),
-            // アプリケーションバンドルは書き込み不可なので、読み込み専用に設定します。
             readOnly: true)
         
         let realm_position = try! Realm(configuration: config)
-        
         let StationArray = realm_position.objects(StationPositionRealm).sorted("StationName", ascending: false)
         
         
-        
-        for staion in StationArray {
-            print("station:\(staion.StationName)")
-            print("lat:\(staion.positions?.lat)")
-            print("lng:\(staion.positions?.lng)")
-            
-        }
         //        realmに書き込み次回起動時はこのDBから読み出す
+        
+        lm = CLLocationManager()
+        lm.delegate = self
+        
+        lm.requestAlwaysAuthorization()
+        lm.desiredAccuracy = kCLLocationAccuracyBest
+        lm.distanceFilter = 300
+        lm.startUpdatingLocation()
         
         //        realmがあるときは現在地を取得
         //        現在地を取得して近くのバス停をピン付する
         
+        PinnningToMap(StationArray)
         
     }
     
@@ -71,4 +81,32 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func PinnningToMap(StationArray:Results<StationPositionRealm>) {
+        /*
+         この方法だと起動時に余分なピンが打たれてしまい重くなる
+         for station_name in StationArray{
+         // MapViewを生成.
+         let lattitude = (station_name.positions?.lat)! as CLLocationDegrees
+         let longtitude = (station_name.positions?.lng)! as CLLocationDegrees
+         
+         //中心座標
+         let center = CLLocationCoordinate2DMake(lattitude, longtitude)
+         
+         //表示範囲
+         let span = MKCoordinateSpanMake(0.01, 0.01)
+         
+         //中心座標と表示範囲をマップに登録する。
+         let region = MKCoordinateRegionMake(center, span)
+         MapView.setRegion(region, animated:true)
+         
+         //地図にピンを立てる。
+         let annotation = MKPointAnnotation()
+         annotation.coordinate = CLLocationCoordinate2DMake(lattitude, longtitude)
+         MapView.addAnnotation(annotation)
+         
+         }
+         */
+    }
 }
+

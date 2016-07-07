@@ -5,13 +5,14 @@
 //  Created by Eiji Takahashi on 2016/07/07.
 //  Copyright © 2016年 devlpEiji. All rights reserved.
 //
-
+//JSONファイルからRealmファイルをつくる関数
+//RealmのモデルはStationPositionRealmを参照
 import Foundation
 import SwiftyJSON
 import Unbox
 import RealmSwift
 
-func json_to_realm(BusData:NSJSONSerialization!){
+func json_to_realm(){
     let BusData = NSData(contentsOfURL:NSBundle.mainBundle().URLForResource("BusStopDataFixed", withExtension: "json")!)
     let json = JSON(data:NSData(contentsOfURL:NSBundle.mainBundle().URLForResource("BusStopDataFixed", withExtension: "json")!)!)
     let realm_position = try! Realm()
@@ -27,6 +28,7 @@ func json_to_realm(BusData:NSJSONSerialization!){
         let rbo:rosen_by_order = try! Unbox(BusData!)
         let rbo_int = rbo.rosen_by_order_Array
         
+        
         var master_station_array:[String] = []
         //        var master_companyid_array:[Int] = []
         //         var master_expl_array:[String] = []
@@ -35,6 +37,14 @@ func json_to_realm(BusData:NSJSONSerialization!){
         
         let rbo_string = rbo_int.map{($0).description} as [String]!
         //        let json = JSON(data:self.BusData!)
+        
+//        確認用
+        //        for staion in StationArray {
+        //            print("station:\(staion.StationName)")
+        //            print("lat:\(staion.positions?.lat)")
+        //            print("lng:\(staion.positions?.lng)")
+        //
+        //        }
         
         //ここでunique_arrayを作る
         for i in rbo_string{
@@ -57,9 +67,9 @@ func json_to_realm(BusData:NSJSONSerialization!){
         for station in unique_array{
             if json != nil {
                 //                lat = 32.000,lng = 34.000など
-                let lat = json["station"]["\(station)"]["lat"].float
-                let lng = json["station"]["\(station)"]["lng"].float
-                
+                let lat = json["station"]["\(station)"]["lat"].double
+                let lng = json["station"]["\(station)"]["lng"].double
+                print(lat.dynamicType)
                 try! realm_position.write(){
                     let station_position = StationPositionRealm()
                     let gps = GPS()
@@ -68,7 +78,6 @@ func json_to_realm(BusData:NSJSONSerialization!){
                     gps.lat = lat!
                     gps.lng = lng!
                     
-                    // この行を追加
                     station_position.positions = gps
                     
                     realm_position.add(station_position)

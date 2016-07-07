@@ -16,8 +16,22 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="hybrid" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pVw-Uh-ho5">
+                                <rect key="frame" x="0.0" y="20" width="600" height="580"/>
+                            </mapView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="pVw-Uh-ho5" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="5qd-qL-J30"/>
+                            <constraint firstItem="pVw-Uh-ho5" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="620-Xu-PmC"/>
+                            <constraint firstAttribute="trailing" secondItem="pVw-Uh-ho5" secondAttribute="trailing" id="822-tv-ax1"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="pVw-Uh-ho5" secondAttribute="bottom" id="bpD-jU-q3U"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="MapView" destination="pVw-Uh-ho5" id="7us-VO-Y5g"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

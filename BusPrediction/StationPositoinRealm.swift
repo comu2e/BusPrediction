@@ -12,8 +12,8 @@ import RealmSwift
 
 
 class GPS:Object{
-    dynamic var lat:Float = 0.0
-    dynamic var lng:Float = 0.0
+    dynamic var lat:Double = 0.0
+    dynamic var lng:Double = 0.0
     let gpses = LinkingObjects(fromType: StationPositionRealm.self, property: "positions")
 }
 
